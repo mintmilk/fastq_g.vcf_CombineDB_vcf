@@ -36,9 +36,10 @@ fi
 if [ ! -d $outdir/gatk ]
 then mkdir -p $outdir/gatk
 fi
+
 time fastp -i $fq1 -o $outdir/cleanfq/${sample}.paired.1.fq.gz -I $fq2 -O $outdir/cleanfq/${sample}.paired.2.fq.gz -j $outdir/cleanfq/${sample}.json -h $outdir/cleanfq/${sample}.html -w 6 --length_required=50 --n_base_limit=6 --compression=6 && echo "** fq QC done **"
 
-time bwa mem -t 4 -M -Y -R "@RG\tID:foo_lane\tPL:ILLUMINA\tLB:library\tSM:$sample" $reference $fq1 $fq2 | samtools view -Sb - > $outdir/bwa/${sample}.bam && echo "** BWA MEM done **" 
+time bwa mem -t 8 -M -Y -R "@RG\tID:foo_lane\tPL:ILLUMINA\tLB:library\tSM:$sample" $reference $outdir/cleanfq/${sample}.paired.1.fq.gz $outdir/cleanfq/${sample}.paired.2.fq.gz | $samtools view -Sb - > $outdir/bwa/${sample}.bam && echo "** BWA MEM done **" 
 
 time samtools sort -@ 4 -m 4G -O bam -o $outdir/bwa/${sample}.sorted.bam $outdir/bwa/${sample}.bam && echo "** sorted raw bamfile done **"
 
