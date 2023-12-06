@@ -2,18 +2,18 @@ import glob
 import os
 import subprocess
 
-# 获取 fastp 目录下所有样本名
-fastq_files = sorted(glob.glob("fastp/*.fq.gz"))
-SAMPLES = sorted(set(os.path.basename(f).split('.', 1)[0] for f in fastq_files))
+# 根据具体文件名编写SAMPLES的获取
+raw_files = sorted(glob.glob("rawdata/*.fq.gz"))
+SAMPLES = sorted(set(os.path.basename(f).split('.', 1)[0] for f in raw_files))
 
 # 脚本路径
-bash_script = "qc2bam.bash"
+bash_script = "qc2gvcf.bash"
 output_dir = "output"
 
 for sample in SAMPLES:
     # 为每个样本构造 fq 文件路径
-    fq1 = f"fastp/{sample}.clean.R1.fq.gz"
-    fq2 = f"fastp/{sample}.clean.R2.fq.gz"
+    fq1 = f"rawdata/{sample}.R1.fq.gz"
+    fq2 = f"rawdata/{sample}.R2.fq.gz"
 
     # 检查文件是否存在
     if not os.path.exists(fq1) or not os.path.exists(fq2):
