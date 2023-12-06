@@ -14,3 +14,5 @@ gatk使用管理员预安装的版本，在qc2gvcf.bash中配置了软件位置�
     -bwa
     
     -gatk
+# 使用说明
+配置好sample获取代码和环境配置部分后，运行new_gvcf.py，并行提交slurm作业对每个样本进行CallSNP，生成g.vcf。检查运行情况后，通过运行CombineDB2.sh提交slurm作业运行。
